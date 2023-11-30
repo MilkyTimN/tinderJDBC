@@ -50,9 +50,19 @@ public class OrderServiceImpl {
         update(order);
     }
 
-    //TODO make universal
-    public List<Order> getSentOrders(int sender) {
-        return repository.findBySenderId(sender, OrderStatus.PENDING);
+    /**
+     * Посмотреть список заявки по статусу
+     */
+    public List<Order> getOrderByStatus(int sender, OrderStatus status) {
+        return repository.findBySenderId(sender, status);
+    }
+
+
+    /**
+     * Посмотреть полученные заявки
+     */
+    public List<Order> getReceivedOrder(int recipientId, OrderStatus status) {
+        return repository.findByRecipientId(recipientId, status);
     }
 
 }

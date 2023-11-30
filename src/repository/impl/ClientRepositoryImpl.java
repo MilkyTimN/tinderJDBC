@@ -2,6 +2,11 @@ package repository.impl;
 
 import model.entity.Client;
 import model.entity.Order;
+import model.enums.Country;
+import model.enums.FamilyStatus;
+import model.enums.Gender;
+import model.enums.Zodiac;
+import model.response.MainListClientResponse;
 import repository.ClientRepository;
 import repository.DbHelper;
 
@@ -10,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ClientRepositoryImpl implements ClientRepository {
 
@@ -70,5 +76,55 @@ public class ClientRepositoryImpl implements ClientRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    //TODO не работате entityManager
+    @Override
+    public List<MainListClientResponse> findClientByFilter(String name, int age, Gender gender,
+                                                           FamilyStatus familyStatus, Zodiac zodiac,
+                                                           Country country, String city, String email) {
+
+        StringBuilder sql = new StringBuilder("SELECT c.id, c.full_name, c.age, c.about, c.city FROM tb_client c WHERE c.status = 'ACTIVE' ");
+
+        if (Objects.nonNull(name)) {
+            sql.append("AND c.name LIKE '%" + name + "%' ");
+        }
+        if (age > 0) {
+            sql.append(" AND c.age = " + age);
+        }
+        if (Objects.nonNull(gender)) {
+            sql.append(" AND c.gender = '" + gender + "'");
+        }
+        if (Objects.nonNull(familyStatus)) {
+            sql.append(" AND c.family_status = '" + familyStatus + "'");
+        }
+        if (Objects.nonNull(zodiac)) {
+            sql.append(" AND c.zodiac = '" + zodiac + "'");
+        }
+        if (Objects.nonNull(country)) {
+            sql.append(" AND c.country = '" + country + "'");
+        }
+        if (Objects.nonNull(city)) {
+            sql.append(" AND c.city = '" + city + "'");
+        }
+        if (Objects.nonNull(email)) {
+            sql.append(" AND c.city LIKE '%" + email + "%' ");
+        }
+
+        List<MainListClientResponse> result = new ArrayList<>();
+
+//        try {
+//            result = entityManager.exexuteQuery(sql, MainListClientResponse);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+
+        return result;
+
+
+
+
+
     }
 }

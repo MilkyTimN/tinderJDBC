@@ -11,4 +11,5 @@ public interface OrderRepository {
     Order findById(int id);
     void update(Order order);
     List<Order> findBySenderId(int sender, OrderStatus status);
+    List<Order> findByRecipientId(int sender, OrderStatus status);
 }

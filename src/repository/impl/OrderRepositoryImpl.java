@@ -97,4 +97,32 @@ public class OrderRepositoryImpl implements OrderRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Order> findByRecipientId(int recipientId, OrderStatus status) {
+        List<Order> orderList = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = dbHelper.getPreparedStatement
+                ("SELECT * FROM tb_order WHERE recipient_id = ? AND status = ?")) {
+            preparedStatement.setInt(1, recipientId);
+            preparedStatement.setString(2, status.toString());
+
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getResultSet();
+
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setId(resultSet.getInt("id"));
+                order.setCreatedDate(resultSet.getTimestamp("created_date").toLocalDateTime());
+                order.setUpdateDate(resultSet.getTimestamp("updated_date").toLocalDateTime());
+                order.setId(resultSet.getInt("id"));
+                order.setId(resultSet.getInt("id"));
+                orderList.add(order);
+            }
+            return orderList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
